@@ -1,0 +1,43 @@
+import socket
+import RPi.GPIO as GPIO
+import time
+
+
+HOST, PORT = '127.0.0.1', 1400
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.bind((HOST, PORT))
+s.listen(1)
+
+conn, addr = s.accept()
+
+print('connected to:', addr)
+# server.py
+import socket
+import RPi.GPIO as GPIO
+import time
+
+
+HOST, PORT = '127.0.0.1', 1400
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.bind((HOST, PORT))
+s.listen(1)
+
+conn, addr = s.accept()
+
+print('connected to:', addr)
+
+while 1:
+    data = conn.recv(1024)
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(18,GPIO.OUT)
+    GPIO.output(18,True)
+    time.sleep(4)
+    GPIO.output(18,False)
+    if not data:
+        break
+    conn.send(data + b' [ addition by server ]')
+
+conn.close()
+
